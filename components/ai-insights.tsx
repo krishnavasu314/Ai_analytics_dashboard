@@ -22,36 +22,34 @@ interface Insight {
 
 const insights: Insight[] = [
   {
-    id: '1',
     type: 'positive',
-    title: 'Revenue Growth Detected',
-    description: 'Your revenue has increased by 23% compared to last month. This trend suggests strong market demand.',
-    action: 'View detailed analysis',
-    icon: <TrendingUp className="h-5 w-5 text-success-500" />
+    title: 'Campaign ROI Surges',
+    description: 'Your Google Ads - Spring Sale campaign achieved a 35% ROI increase this week. Consider allocating more budget to this channel.',
+    icon: <TrendingUp />
   },
   {
-    id: '2',
     type: 'warning',
-    title: 'Inventory Alert',
-    description: 'Product "Wireless Headphones" is running low on stock. Consider restocking soon to avoid stockouts.',
-    action: 'Manage inventory',
-    icon: <AlertTriangle className="h-5 w-5 text-warning-500" />
+    title: 'Low Engagement Alert',
+    description: 'Instagram Influencer - Brand Awareness campaign engagement dropped by 12%. Try new creative or adjust posting times.',
+    icon: <AlertTriangle />
   },
   {
-    id: '3',
     type: 'info',
-    title: 'Customer Behavior Insight',
-    description: 'Customers are 40% more likely to purchase during evening hours. Consider adjusting your marketing strategy.',
-    action: 'Optimize timing',
-    icon: <Lightbulb className="h-5 w-5 text-primary-500" />
+    title: 'Email Open Rates Up',
+    description: 'Your Email Blast - New Product Launch campaign saw a 22% increase in open rates. Personalized subject lines are working well.',
+    icon: <Lightbulb />
   },
   {
-    id: '4',
     type: 'positive',
-    title: 'Conversion Rate Improvement',
-    description: 'Your checkout process optimization has resulted in a 15% increase in conversion rates.',
-    action: 'See improvements',
-    icon: <Sparkles className="h-5 w-5 text-success-500" />
+    title: 'Retargeting Success',
+    description: 'Facebook Ads - Retargeting campaign is converting 18% more users than last month. Retargeting is driving strong results.',
+    icon: <TrendingUp />
+  },
+  {
+    type: 'info',
+    title: 'B2B Leads Growing',
+    description: 'LinkedIn Outreach - B2B Leads campaign generated 40 new leads this week. Keep nurturing these prospects.',
+    icon: <Lightbulb />
   }
 ]
 

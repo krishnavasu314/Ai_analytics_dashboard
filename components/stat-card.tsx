@@ -9,6 +9,7 @@ import {
   TrendingDown
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useEffect, useState } from 'react'
 
 interface StatCardProps {
   title: string
@@ -44,6 +45,17 @@ export function StatCard({
   className
 }: StatCardProps) {
   const IconComponent = iconMap[icon]
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  if (!mounted) {
+    return (
+      <div className={cn("card p-6", className)}>
+        <div className="h-4 w-24 bg-muted rounded mb-4 animate-pulse" />
+        <div className="h-8 w-32 bg-muted rounded mb-2 animate-pulse" />
+        <div className="h-4 w-16 bg-muted rounded animate-pulse" />
+      </div>
+    )
+  }
 
   return (
     <motion.div

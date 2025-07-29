@@ -11,6 +11,7 @@ import { AIRecommendations } from '@/components/ai-recommendations'
 import { RecentTransactions } from '@/components/recent-transactions'
 import { TopProducts } from '@/components/top-products'
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 // Main dashboard component - handles the overview page
 export default function Dashboard() {
@@ -39,6 +40,31 @@ export default function Dashboard() {
     { name: 'Beauty', value: 239 },
   ]
 
+  // Real-time revenue state
+  const [revenue, setRevenue] = useState(45231.89)
+  const [revenueChange, setRevenueChange] = useState(20.1)
+  const [isLive, setIsLive] = useState(true)
+
+  // Loading state for skeletons
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500)
+    return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    // Simulate real-time updates every 5 seconds
+    const interval = setInterval(() => {
+      // Randomly increase or decrease revenue
+      const delta = (Math.random() - 0.4) * 200
+      setRevenue(prev => Math.max(0, prev + delta))
+      setRevenueChange(prev => prev + (Math.random() - 0.5) * 2)
+      setIsLive(true)
+      setTimeout(() => setIsLive(false), 1200)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -65,38 +91,57 @@ export default function Dashboard() {
           transition={{ delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
         >
-          <StatCard
-            title="Total Revenue"
-            value="$45,231.89"
-            change="+20.1%"
-            changeType="positive"
-            icon="dollar"
-            gradient="primary"
-          />
-          <StatCard
-            title="Total Orders"
-            value="2,350"
-            change="+180.1%"
-            changeType="positive"
-            icon="shopping-cart"
-            gradient="secondary"
-          />
-          <StatCard
-            title="Active Users"
-            value="1,234"
-            change="+19%"
-            changeType="positive"
-            icon="users"
-            gradient="success"
-          />
-          <StatCard
-            title="Conversion Rate"
-            value="3.24%"
-            change="-1.2%"
-            changeType="negative"
-            icon="trending-up"
-            gradient="warning"
-          />
+          {loading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="card p-6 animate-pulse">
+                <div className="h-4 w-24 bg-muted rounded mb-4" />
+                <div className="h-8 w-32 bg-muted rounded mb-2" />
+                <div className="h-4 w-16 bg-muted rounded" />
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="relative">
+                <StatCard
+                  title="Total Revenue"
+                  value={`$${revenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                  change={`${revenueChange > 0 ? '+' : ''}${revenueChange.toFixed(1)}%`}
+                  changeType={revenueChange >= 0 ? 'positive' : 'negative'}
+                  icon="dollar"
+                  gradient="primary"
+                />
+                {/* Live indicator */}
+                <div className="absolute top-3 right-3 flex items-center space-x-1">
+                  <span className={`h-2 w-2 rounded-full ${isLive ? 'bg-success-500 animate-pulse' : 'bg-muted-foreground'}`}></span>
+                  <span className="text-xs text-muted-foreground">Live</span>
+                </div>
+              </div>
+              <StatCard
+                title="Total Orders"
+                value="2,350"
+                change="+180.1%"
+                changeType="positive"
+                icon="shopping-cart"
+                gradient="secondary"
+              />
+              <StatCard
+                title="Active Users"
+                value="1,234"
+                change="+19%"
+                changeType="positive"
+                icon="users"
+                gradient="success"
+              />
+              <StatCard
+                title="Conversion Rate"
+                value="3.24%"
+                change="-1.2%"
+                changeType="negative"
+                icon="trending-up"
+                gradient="warning"
+              />
+            </>
+          )}
         </motion.div>
 
         {/* AI features section */}
@@ -106,13 +151,26 @@ export default function Dashboard() {
           transition={{ delay: 0.2 }}
           className="mb-8"
         >
-          <h2 className="text-2xl font-bold text-foreground mb-4">
-            Smart Analytics 🤖
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <AIChat />
-            <AIPredictions />
-          </div>
+          {loading ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="card h-[450px] flex flex-col animate-pulse">
+                  <div className="h-8 w-40 bg-muted rounded mb-4" />
+                  <div className="flex-1 bg-muted rounded" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <h2 className="text-2xl font-bold text-foreground mb-4">
+                Smart Analytics 🤖
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <AIChat />
+                <AIPredictions />
+              </div>
+            </>
+          )}
         </motion.div>
 
         {/* Business recommendations */}
@@ -122,81 +180,76 @@ export default function Dashboard() {
           transition={{ delay: 0.3 }}
           className="mb-8"
         >
-          <AIRecommendations />
+          {loading ? (
+            <div className="card h-40 animate-pulse">
+              <div className="h-8 w-40 bg-muted rounded mb-4" />
+              <div className="h-6 w-3/4 bg-muted rounded mb-2" />
+              <div className="h-6 w-1/2 bg-muted rounded" />
+            </div>
+          ) : (
+            <AIRecommendations />
+          )}
         </motion.div>
 
-        {/* Charts and data section */}
+        {/* Main content grid: 2x2 for charts, then sidebar */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left side - charts */}
+          {/* 2x2 grid for charts and table */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Revenue trend chart */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <ChartCard
-                title="Revenue Trends"
-                subtitle="Monthly performance with trend analysis"
-                type="line"
-                data={revenueData}
-                className="h-80"
-              />
-            </motion.div>
-
-            {/* Sales breakdown */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <ChartCard
-                title="Sales by Category"
-                subtitle="Product category performance breakdown"
-                type="bar"
-                data={salesData}
-                className="h-80"
-              />
-            </motion.div>
-
-            {/* Recent activity */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-            >
-              <RecentTransactions />
-            </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {loading ? (
+                Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="card h-80 animate-pulse">
+                    <div className="h-8 w-40 bg-muted rounded mb-4" />
+                    <div className="h-64 w-full bg-muted rounded" />
+                  </div>
+                ))
+              ) : (
+                <>
+                  <ChartCard
+                    title="Revenue Trends"
+                    subtitle="Monthly performance with trend analysis"
+                    type="line"
+                    data={revenueData}
+                    className="h-96"
+                  />
+                  <ChartCard
+                    title="Sales by Category"
+                    subtitle="Product category performance breakdown"
+                    type="bar"
+                    data={salesData}
+                    className="h-96"
+                  />
+                </>
+              )}
+            </div>
+            <div>
+              {loading ? (
+                <div className="card h-80 animate-pulse">
+                  <div className="h-8 w-40 bg-muted rounded mb-4" />
+                  <div className="h-64 w-full bg-muted rounded" />
+                </div>
+              ) : (
+                <RecentTransactions />
+              )}
+            </div>
           </div>
-
-          {/* Right sidebar */}
+          {/* Sidebar */}
           <div className="space-y-8">
-            {/* AI insights */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <AIInsights />
-            </motion.div>
-
-            {/* Top performing products */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <TopProducts />
-            </motion.div>
-
-            {/* Activity feed */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-            >
-              <ActivityFeed />
-            </motion.div>
+            {loading ? (
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="card h-40 animate-pulse">
+                  <div className="h-8 w-40 bg-muted rounded mb-4" />
+                  <div className="h-6 w-3/4 bg-muted rounded mb-2" />
+                  <div className="h-6 w-1/2 bg-muted rounded" />
+                </div>
+              ))
+            ) : (
+              <>
+                <AIInsights />
+                <TopProducts />
+                <ActivityFeed />
+              </>
+            )}
           </div>
         </div>
       </main>

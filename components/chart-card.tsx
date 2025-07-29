@@ -13,13 +13,18 @@ import {
   ResponsiveContainer,
   Area,
   AreaChart,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from 'recharts'
 import { cn } from '@/lib/utils'
+import { useEffect, useState } from 'react'
 
 interface ChartCardProps {
   title: string
   subtitle: string
-  type: 'line' | 'bar' | 'area'
+  type: 'line' | 'bar' | 'area' | 'pie'
   data: Array<{ name: string; value: number }>
   className?: string
 }
@@ -45,6 +50,22 @@ export function ChartCard({
   data,
   className
 }: ChartCardProps) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  if (!mounted) {
+    return (
+      <div className={cn("card", className)}>
+        <div className="card-header">
+          <h3 className="card-title">{title}</h3>
+          <p className="card-description">{subtitle}</p>
+        </div>
+        <div className="card-content h-72 flex items-center justify-center">
+          <div className="h-8 w-40 bg-muted rounded animate-pulse" />
+        </div>
+      </div>
+    )
+  }
+
   const renderChart = () => {
     switch (type) {
       case 'line':
@@ -140,6 +161,29 @@ export function ChartCard({
               </linearGradient>
             </defs>
           </AreaChart>
+        )
+      
+      case 'pie':
+        return (
+          <PieChart>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              innerRadius={50}
+              fill="#8884d8"
+              label
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#6366f1'][index % 6]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
         )
       
       default:

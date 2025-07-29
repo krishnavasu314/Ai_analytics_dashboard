@@ -19,51 +19,51 @@ interface Product {
   category: string
 }
 
-const products: Product[] = [
+const topProducts = [
   {
-    id: '1',
-    name: 'Wireless Headphones',
-    sales: 234,
-    revenue: 70199.99,
+    rank: 1,
+    name: 'Google Ads - Spring Sale',
+    category: 'Search Ads',
     rating: 4.8,
-    image: '🎧',
-    category: 'Electronics'
+    sales: 320,
+    revenue: 12000.00,
+    growth: 18
   },
   {
-    id: '2',
-    name: 'Smart Watch Pro',
-    sales: 189,
-    revenue: 28349.99,
-    rating: 4.9,
-    image: '⌚',
-    category: 'Electronics'
-  },
-  {
-    id: '3',
-    name: 'Premium Coffee Maker',
-    sales: 156,
-    revenue: 23399.99,
+    rank: 2,
+    name: 'Instagram Influencer - Brand Awareness',
+    category: 'Social Media',
     rating: 4.7,
-    image: '☕',
-    category: 'Home & Kitchen'
+    sales: 210,
+    revenue: 8000.00,
+    growth: 15
   },
   {
-    id: '4',
-    name: 'Yoga Mat Premium',
-    sales: 142,
-    revenue: 14200.00,
+    rank: 3,
+    name: 'Email Blast - New Product Launch',
+    category: 'Email',
     rating: 4.6,
-    image: '🧘',
-    category: 'Sports'
+    sales: 180,
+    revenue: 5000.00,
+    growth: 12
   },
   {
-    id: '5',
-    name: 'Bluetooth Speaker',
-    sales: 128,
-    revenue: 19199.99,
+    rank: 4,
+    name: 'Facebook Ads - Retargeting',
+    category: 'Social Media',
     rating: 4.5,
-    image: '🔊',
-    category: 'Electronics'
+    sales: 150,
+    revenue: 9500.00,
+    growth: 10
+  },
+  {
+    rank: 5,
+    name: 'LinkedIn Outreach - B2B Leads',
+    category: 'B2B',
+    rating: 4.4,
+    sales: 90,
+    revenue: 3000.00,
+    growth: 8
   }
 ]
 
@@ -88,9 +88,9 @@ export function TopProducts() {
       
       <div className="card-content">
         <div className="space-y-4">
-          {products.map((product, index) => (
+          {topProducts.map((product, index) => (
             <motion.div
-              key={product.id}
+              key={product.rank}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -100,19 +100,19 @@ export function TopProducts() {
               <div className="flex-shrink-0">
                 <div className={cn(
                   "h-8 w-8 rounded-full flex items-center justify-center text-sm font-bold",
-                  index === 0 ? "bg-warning-100 text-warning-800" :
-                  index === 1 ? "bg-secondary-100 text-secondary-800" :
-                  index === 2 ? "bg-primary-100 text-primary-800" :
+                  product.rank === 1 ? "bg-warning-100 text-warning-800" :
+                  product.rank === 2 ? "bg-secondary-100 text-secondary-800" :
+                  product.rank === 3 ? "bg-primary-100 text-primary-800" :
                   "bg-muted text-muted-foreground"
                 )}>
-                  #{index + 1}
+                  #{product.rank}
                 </div>
               </div>
 
               {/* Product Image */}
               <div className="flex-shrink-0">
                 <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center text-2xl">
-                  {product.image}
+                  {product.name.charAt(0)}
                 </div>
               </div>
 
@@ -146,7 +146,7 @@ export function TopProducts() {
                 <div className="flex items-center space-x-1 mt-1">
                   <TrendingUp className="h-3 w-3 text-success-500" />
                   <span className="text-xs text-success-600">
-                    +{Math.floor(Math.random() * 20 + 10)}%
+                    +{product.growth}%
                   </span>
                 </div>
               </div>

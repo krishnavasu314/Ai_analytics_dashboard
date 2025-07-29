@@ -11,8 +11,13 @@ import {
   Filter
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useEffect, useState } from 'react'
 
 export default function ReportsPage() {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  if (!mounted) return null
+
   return (
     <div className="min-h-screen bg-background">
       <Header />

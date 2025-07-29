@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { formatCurrency, formatDateTime } from '@/lib/utils'
 import { cn } from '@/lib/utils'
+import { useState } from 'react'
 
 interface Transaction {
   id: string
@@ -24,48 +25,48 @@ interface Transaction {
 const transactions: Transaction[] = [
   {
     id: '1',
-    customer: 'John Smith',
-    amount: 299.99,
+    customer: 'Acme Corp',
+    amount: 1200.00,
     status: 'completed',
     type: 'purchase',
-    date: new Date('2024-01-15T10:30:00'),
-    product: 'Wireless Headphones'
+    date: new Date('2024-02-01T09:00:00'),
+    product: 'Google Ads - Spring Sale'
   },
   {
     id: '2',
-    customer: 'Sarah Johnson',
-    amount: 149.99,
+    customer: 'Bright Media',
+    amount: 800.00,
     status: 'pending',
     type: 'purchase',
-    date: new Date('2024-01-15T09:15:00'),
-    product: 'Smart Watch'
+    date: new Date('2024-02-02T10:30:00'),
+    product: 'Instagram Influencer - Brand Awareness'
   },
   {
     id: '3',
-    customer: 'Mike Wilson',
-    amount: 89.99,
+    customer: 'Delta Agency',
+    amount: 500.00,
     status: 'completed',
     type: 'subscription',
-    date: new Date('2024-01-15T08:45:00'),
-    product: 'Premium Plan'
+    date: new Date('2024-02-03T14:15:00'),
+    product: 'Email Blast - New Product Launch'
   },
   {
     id: '4',
-    customer: 'Emily Davis',
-    amount: 199.99,
+    customer: 'NextGen Startups',
+    amount: 950.00,
     status: 'failed',
     type: 'purchase',
-    date: new Date('2024-01-15T08:20:00'),
-    product: 'Laptop Stand'
+    date: new Date('2024-02-04T11:45:00'),
+    product: 'Facebook Ads - Retargeting'
   },
   {
     id: '5',
-    customer: 'David Brown',
-    amount: 79.99,
+    customer: 'Visionary Brands',
+    amount: 300.00,
     status: 'completed',
     type: 'refund',
-    date: new Date('2024-01-15T07:55:00'),
-    product: 'Phone Case'
+    date: new Date('2024-02-05T16:20:00'),
+    product: 'LinkedIn Outreach - B2B Leads'
   }
 ]
 
@@ -82,6 +83,29 @@ const typeIcons = {
 }
 
 export function RecentTransactions() {
+  // Export CSV logic
+  const handleExportCSV = () => {
+    const headers = ['Customer', 'Product', 'Amount', 'Status', 'Type', 'Date']
+    const rows = transactions.map(tx => [
+      tx.customer,
+      tx.product,
+      tx.amount,
+      tx.status,
+      tx.type,
+      tx.date.toLocaleString()
+    ])
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(String).map(cell => `"${cell.replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'transactions.csv'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -92,8 +116,15 @@ export function RecentTransactions() {
         <h3 className="card-title">Recent Transactions</h3>
         <p className="card-description">Latest customer transactions and orders</p>
       </div>
-      
       <div className="card-content">
+        <div className="flex justify-end mb-2">
+          <button
+            onClick={handleExportCSV}
+            className="px-3 py-1.5 rounded-md bg-primary-600 text-white text-xs font-medium hover:bg-primary-700 transition-colors"
+          >
+            Export CSV
+          </button>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

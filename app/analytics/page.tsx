@@ -8,7 +8,6 @@ export default function AnalyticsPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -23,62 +22,49 @@ export default function AnalyticsPage() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <ChartCard
-              title="User Growth"
-              subtitle="Monthly user acquisition trends"
-              type="line"
-              data={userGrowthData}
-              className="h-80"
-            />
-          </motion.div>
+        {/* 2x2 grid for first 4 charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <ChartCard
+            title="User Growth"
+            subtitle="Monthly user acquisition trends"
+            type="line"
+            data={userGrowthData}
+            className="h-96"
+          />
+          <ChartCard
+            title="Conversion Funnel"
+            subtitle="User journey through your platform"
+            type="bar"
+            data={conversionData}
+            className="h-96"
+          />
+          <ChartCard
+            title="Geographic Distribution"
+            subtitle="Users by location"
+            type="area"
+            data={geoData}
+            className="h-96"
+          />
+          <ChartCard
+            title="Device Usage"
+            subtitle="Platform distribution"
+            type="bar"
+            data={deviceData}
+            className="h-96"
+          />
+        </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+        {/* Centered Pie/Donut chart */}
+        <div className="flex justify-center">
+          <div className="w-full max-w-xl">
             <ChartCard
-              title="Conversion Funnel"
-              subtitle="User journey through your platform"
-              type="bar"
-              data={conversionData}
-              className="h-80"
+              title="Campaign Channel Breakdown"
+              subtitle="Share of spend by channel"
+              type="pie"
+              data={productCategoryData}
+              className="h-96"
             />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <ChartCard
-              title="Geographic Distribution"
-              subtitle="Users by location"
-              type="area"
-              data={geoData}
-              className="h-80"
-            />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <ChartCard
-              title="Device Usage"
-              subtitle="Platform distribution"
-              type="bar"
-              data={deviceData}
-              className="h-80"
-            />
-          </motion.div>
+          </div>
         </div>
       </main>
     </div>
@@ -101,21 +87,30 @@ const userGrowthData = [
 ]
 
 const conversionData = [
-  { name: 'Visitors', value: 10000 },
-  { name: 'Signups', value: 2500 },
-  { name: 'Trials', value: 1500 },
+  { name: 'Visited', value: 5000 },
+  { name: 'Signed Up', value: 2000 },
+  { name: 'Activated', value: 1200 },
   { name: 'Paid', value: 800 },
 ]
 
 const geoData = [
-  { name: 'North America', value: 45 },
-  { name: 'Europe', value: 30 },
-  { name: 'Asia', value: 15 },
-  { name: 'Others', value: 10 },
+  { name: 'USA', value: 3200 },
+  { name: 'India', value: 2100 },
+  { name: 'UK', value: 900 },
+  { name: 'Germany', value: 700 },
+  { name: 'Canada', value: 600 },
 ]
 
 const deviceData = [
   { name: 'Desktop', value: 60 },
   { name: 'Mobile', value: 35 },
   { name: 'Tablet', value: 5 },
+]
+
+const productCategoryData = [
+  { name: 'Search Ads', value: 400 },
+  { name: 'Social Media', value: 300 },
+  { name: 'Email', value: 200 },
+  { name: 'B2B', value: 100 },
+  { name: 'Other', value: 50 },
 ] 
